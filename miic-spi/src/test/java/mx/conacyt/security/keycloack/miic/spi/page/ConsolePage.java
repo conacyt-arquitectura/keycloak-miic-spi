@@ -1,13 +1,11 @@
 package mx.conacyt.security.keycloack.miic.spi.page;
 
+import java.util.concurrent.TimeUnit;
 import org.jboss.arquillian.graphene.Graphene;
-import org.jboss.arquillian.graphene.findby.FindByJQuery;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -17,17 +15,11 @@ public class ConsolePage {
     @FindBy(partialLinkText = "User Federation")
     private WebElement userFederationLink;
 
-    @FindBy(partialLinkText = "readonly-property-file")
-    private WebElement readOnlyStorageLink;
+    @FindBy(partialLinkText = "example-user-storage-jpa")
+    private WebElement exampleFederationStorageLink;
 
-    @FindBy(partialLinkText = "writeable-property-file")
-    private WebElement writableStorageLink;
-
-    @FindBy(xpath = "//select/option[normalize-space(text())='readonly-property-file']")
-    private WebElement readOnlyStorageOption;
-
-    @FindBy(xpath = "//select/option[normalize-space(text())='writeable-property-file']")
-    private WebElement writableStorageOption;
+    @FindBy(xpath = "//select/option[normalize-space(text())='example-user-storage-jpa']")
+    private WebElement userStorageOption;
 
     @FindBy(xpath = "//button[text()[contains(.,'Save')]]")
     private WebElement save;
@@ -44,63 +36,37 @@ public class ConsolePage {
     @FindBy(linkText = "Sign Out")
     private WebElement logoutLink;
 
-    @FindByJQuery("input[class*='form-control']:eq(3)")
-    private WebElement propertyPath;
-
     public void navigateToUserFederationMenu() {
-        Graphene.waitGui().until(ExpectedConditions.elementToBeClickable(
+        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.elementToBeClickable(
                 By.partialLinkText("User Federation")));
         userFederationLink.click();
     }
 
-    public void selectReadOnlyUserStorage() {
-        readOnlyStorageOption.click();
+    public void selectUserStorage() {
+        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//select/option[normalize-space(text())='example-user-storage-jpa']")));
+        userStorageOption.click();
     }
 
-    public void selectWritableUserStorage() {
-        writableStorageOption.click();
+    public String getUser() {
+        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("username")));
+        return username.getAttribute("value");
     }
 
     public void logout() {
         logoutLink.click();
     }
 
-    public String getUser() {
-        Graphene.waitGui().until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("username")));
-        return username.getAttribute("value");
-    }
-
-    public WebElement readOnlyStorageLink() {
-        return readOnlyStorageLink;
-    }
-
-    public WebElement writableStorageLink() {
-        return writableStorageLink;
-    }
-
-    public void createReadOnlyStorage() {
-        navigateToUserFederationMenu();
-        selectReadOnlyUserStorage();
-        save.click();
-    }
-
-    public void selectWritableStorage() {
-        navigateToUserFederationMenu();
-        selectWritableUserStorage();
+    public WebElement exampleFederationStorageLink() {
+        return exampleFederationStorageLink;
     }
 
     public void save() {
         save.click();
     }
 
-    public void setFileStoragePath(String path) {
-        propertyPath.clear();
-        propertyPath.sendKeys(path);
-    }
-
     public void delete() {
-        navigateToUserFederationMenu();
         deleteBtn.click();
         deleteConfirmationBtn.click();
     }

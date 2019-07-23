@@ -12,9 +12,29 @@ Requerimientos del Sistema
 Construcción y despliegue
 -------------------------------
 
-Para desplegar se deberá de ejecutar el siguiente comando:
+
+Para instalar controlador de PostgreSQL:
+
+```bash
+mvn -Padd-postgresql-datasource install
+```
+
+Para instalar controlador de Oracle:
+
+```bash
+mvn -Padd-oracle-datasource install
+```
+
+Para instalar controlador de Oracle en modo XA:
+
+```bash
+mvn -Padd-xa-datasource install
+```
+   
+Para desplegar el componente:
 
 
 ```bash
 mvn clean install wildfly:deploy
 ```
+

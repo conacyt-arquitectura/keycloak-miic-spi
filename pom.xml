@@ -231,7 +231,7 @@
 					<version>${version.enforcer.maven.plugin}</version>
 					<executions>
 						<execution>
-							<id>enforce-quickstart-realm-file-exist</id>
+							<id>enforce-conacyt-realm-file-exist</id>
 							<goals>
 								<goal>enforce</goal>
 							</goals>
@@ -240,7 +240,7 @@
 								<rules>
 									<requireFilesExist>
 										<files>
-											<file>${basedir}/src/test/resources/quickstart-realm.json</file>
+											<file>${basedir}/src/test/resources/conacyt-realm.json</file>
 										</files>
 									</requireFilesExist>
 								</rules>
