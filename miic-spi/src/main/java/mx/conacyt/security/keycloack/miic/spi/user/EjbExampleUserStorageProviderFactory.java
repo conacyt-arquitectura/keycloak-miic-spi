@@ -35,7 +35,7 @@ public class EjbExampleUserStorageProviderFactory implements UserStorageProvider
     public EjbExampleUserStorageProvider create(KeycloakSession session, ComponentModel model) {
         try {
             InitialContext ctx = new InitialContext();
-            EjbExampleUserStorageProvider provider = (EjbExampleUserStorageProvider)ctx.lookup("java:global/user-storage-jpa-example/" + EjbExampleUserStorageProvider.class.getSimpleName());
+            EjbExampleUserStorageProvider provider = (EjbExampleUserStorageProvider)ctx.lookup("java:global/user-storage-miic/" + EjbExampleUserStorageProvider.class.getSimpleName());
             provider.setModel(model);
             provider.setSession(session);
             return provider;
@@ -46,12 +46,12 @@ public class EjbExampleUserStorageProviderFactory implements UserStorageProvider
 
     @Override
     public String getId() {
-        return "example-user-storage-jpa";
+        return "miic-user-storage";
     }
 
     @Override
     public String getHelpText() {
-        return "JPA Example User Storage Provider";
+        return "miic user storage provider";
     }
 
     @Override

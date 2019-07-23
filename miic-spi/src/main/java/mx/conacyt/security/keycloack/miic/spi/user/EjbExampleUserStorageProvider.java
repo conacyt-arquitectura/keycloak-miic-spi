@@ -50,10 +50,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
- * @version $Revision: 1 $
- */
 @Stateful
 @Local(EjbExampleUserStorageProvider.class)
 public class EjbExampleUserStorageProvider implements UserStorageProvider,
@@ -139,8 +135,8 @@ public class EjbExampleUserStorageProvider implements UserStorageProvider,
     @Override
     public UserModel addUser(RealmModel realm, String username) {
         UserEntity entity = new UserEntity();
-        entity.setId(UUID.randomUUID().toString());
-        entity.setUsername(username);
+        entity.setId(Long.getLong(UUID.randomUUID().toString()));
+        entity.setLogin(username);
         em.persist(entity);
         logger.info("added user: " + username);
         return new UserAdapter(session, realm, model, entity);

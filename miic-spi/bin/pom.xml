@@ -185,13 +185,13 @@
 									<goal>add-resource</goal>
 								</goals>
 								<configuration>
-									<address>subsystem=datasources,data-source=java:jboss/datasources/PostgresqlConacyt</address>
+									<address>subsystem=datasources,data-source=java:jboss/datasources/Conacyt</address>
 									<resources>
 										<resource>
 											<properties>
-												<jndi-name>java:jboss/datasources/PostgresqlConacyt</jndi-name>
+												<jndi-name>java:jboss/datasources/Conacyt</jndi-name>
 												<enabled>true</enabled>
-												<connection-url>jdbc:postgresql://localhost:5432/test</connection-url>
+												<connection-url>jdbc:postgresql://localhost:5432/test;DB_CLOSE_DELAY=-1</connection-url>
 												<driver-class>org.postgresql.Driver </driver-class>
 												<driver-name>postgresql.jar</driver-name>
 												<user-name>test</user-name>

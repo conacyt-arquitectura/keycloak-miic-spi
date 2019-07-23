@@ -16,71 +16,187 @@
  */
 package mx.conacyt.security.keycloack.miic.spi.user;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import java.time.Instant;
+import java.util.Locale;
 
-/**
- * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
- * @version $Revision: 1 $
- */
-@NamedQueries({
-        @NamedQuery(name="getUserByUsername", query="select u from UserEntity u where u.username = :username"),
-        @NamedQuery(name="getUserByEmail", query="select u from UserEntity u where u.email = :email"),
-        @NamedQuery(name="getUserCount", query="select count(u) from UserEntity u"),
-        @NamedQuery(name="getAllUsers", query="select u from UserEntity u"),
-        @NamedQuery(name="searchForUser", query="select u from UserEntity u where " +
-                "( lower(u.username) like :search or u.email like :search ) order by u.username"),
-})
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@NamedQueries({ @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.login = :login"),
+		@NamedQuery(name = "getUserByEmail", query = "select u from UserEntity u where u.email = :email"),
+		@NamedQuery(name = "getUserCount", query = "select count(u) from UserEntity u"),
+		@NamedQuery(name = "getAllUsers", query = "select u from UserEntity u"),
+		@NamedQuery(name = "searchForUser", query = "select u from UserEntity u where "
+				+ "( lower(u.login) like :search or u.email like :search ) order by u.login"), })
 @Entity
+@Table(name = "jhi_user")
 public class UserEntity {
-    @Id
-    private String id;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+	@SequenceGenerator(name = "sequenceGenerator")
+	private Long id;
 
-    private String username;
-    private String email;
-    private String password;
-    private String phone;
+	@Column(length = 50, unique = true, nullable = false)
+	private String login;
 
-    public String getId() {
-        return id;
-    }
+	@Column(name = "password_hash", length = 60, nullable = false)
+	private String password;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	@Column(name = "first_name", length = 50)
+	private String firstName;
 
-    public String getUsername() {
-        return username;
-    }
+	@Column(name = "last_name", length = 50)
+	private String lastName;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	@Column(length = 254, unique = true)
+	private String email;
 
-    public String getEmail() {
-        return email;
-    }
+	@Column(nullable = false)
+	private boolean activated = false;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	@Column(name = "lang_key", length = 10)
+	private String langKey;
 
-    public String getPassword() {
-        return password;
-    }
+	@Column(name = "image_url", length = 256)
+	private String imageUrl;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	@Column(name = "activation_key", length = 20)
+	@JsonIgnore
+	private String activationKey;
 
-    public String getPhone() {
-        return phone;
-    }
+	@Column(name = "reset_key", length = 20)
+	@JsonIgnore
+	private String resetKey;
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	@Column(name = "reset_date")
+	private Instant resetDate = null;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	// Lowercase the login before saving it in database
+	public void setLogin(String login) {
+		this.login = lowerCase(login, Locale.ENGLISH);
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public boolean getActivated() {
+		return activated;
+	}
+
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
+
+	public String getActivationKey() {
+		return activationKey;
+	}
+
+	public void setActivationKey(String activationKey) {
+		this.activationKey = activationKey;
+	}
+
+	public String getResetKey() {
+		return resetKey;
+	}
+
+	public void setResetKey(String resetKey) {
+		this.resetKey = resetKey;
+	}
+
+	public Instant getResetDate() {
+		return resetDate;
+	}
+
+	public void setResetDate(Instant resetDate) {
+		this.resetDate = resetDate;
+	}
+
+	public String getLangKey() {
+		return langKey;
+	}
+
+	public void setLangKey(String langKey) {
+		this.langKey = langKey;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof UserEntity)) {
+			return false;
+		}
+		return id != null && id.equals(((UserEntity) o).id);
+	}
+
+	@Override
+	public int hashCode() {
+		return 31;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" + "login='" + login + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName
+				+ '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\'' + ", activated='" + activated
+				+ '\'' + ", langKey='" + langKey + '\'' + ", activationKey='" + activationKey + '\'' + "}";
+	}
+
+	private static String lowerCase(final String str, final Locale locale) {
+		if (str == null) {
+			return null;
+		}
+		return str.toLowerCase(locale);
+	}
 }

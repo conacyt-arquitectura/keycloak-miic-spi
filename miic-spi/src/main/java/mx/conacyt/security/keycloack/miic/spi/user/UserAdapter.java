@@ -40,7 +40,7 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
     public UserAdapter(KeycloakSession session, RealmModel realm, ComponentModel model, UserEntity entity) {
         super(session, realm, model);
         this.entity = entity;
-        keycloakId = StorageId.keycloakId(model, entity.getId());
+        keycloakId = StorageId.keycloakId(model, entity.getId().toString());
     }
 
     public String getPassword() {
@@ -53,12 +53,12 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
 
     @Override
     public String getUsername() {
-        return entity.getUsername();
+        return entity.getLogin();
     }
 
     @Override
     public void setUsername(String username) {
-        entity.setUsername(username);
+        entity.setLogin(username);
 
     }
 
@@ -79,8 +79,8 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
 
     @Override
     public void setSingleAttribute(String name, String value) {
-        if (name.equals("phone")) {
-            entity.setPhone(value);
+        if (name.equals("firstName")) {
+            entity.setFirstName(value);
         } else {
             super.setSingleAttribute(name, value);
         }
@@ -88,8 +88,8 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
 
     @Override
     public void removeAttribute(String name) {
-        if (name.equals("phone")) {
-            entity.setPhone(null);
+        if (name.equals("firstName")) {
+            entity.setFirstName(null);
         } else {
             super.removeAttribute(name);
         }
@@ -98,7 +98,7 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
     @Override
     public void setAttribute(String name, List<String> values) {
         if (name.equals("phone")) {
-            entity.setPhone(values.get(0));
+            entity.setFirstName(values.get(0));
         } else {
             super.setAttribute(name, values);
         }
@@ -107,7 +107,7 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
     @Override
     public String getFirstAttribute(String name) {
         if (name.equals("phone")) {
-            return entity.getPhone();
+            return entity.getFirstName();
         } else {
             return super.getFirstAttribute(name);
         }
@@ -118,7 +118,7 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
         Map<String, List<String>> attrs = super.getAttributes();
         MultivaluedHashMap<String, String> all = new MultivaluedHashMap<>();
         all.putAll(attrs);
-        all.add("phone", entity.getPhone());
+        all.add("phone", entity.getFirstName());
         return all;
     }
 
@@ -126,7 +126,7 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
     public List<String> getAttribute(String name) {
         if (name.equals("phone")) {
             List<String> phone = new LinkedList<>();
-            phone.add(entity.getPhone());
+            phone.add(entity.getFirstName());
             return phone;
         } else {
             return super.getAttribute(name);
