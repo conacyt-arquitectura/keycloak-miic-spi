@@ -192,7 +192,7 @@
 												<jndi-name>java:jboss/datasources/PostgresqlConacyt</jndi-name>
 												<enabled>true</enabled>
 												<connection-url>jdbc:postgresql://localhost:5432/test</connection-url>
-												<driver-class>org.postgresql.Driver </driver-class>
+												<driver-class>org.postgresql.Driver</driver-class>
 												<driver-name>postgresql.jar</driver-name>
 												<user-name>test</user-name>
 												<password>test</password>

@@ -35,7 +35,7 @@ public class EjbExampleUserStorageProviderFactory implements UserStorageProvider
     public EjbExampleUserStorageProvider create(KeycloakSession session, ComponentModel model) {
         try {
             InitialContext ctx = new InitialContext();
-            EjbExampleUserStorageProvider provider = (EjbExampleUserStorageProvider)ctx.lookup("java:global/user-storage-miic/" + EjbExampleUserStorageProvider.class.getSimpleName());
+            EjbExampleUserStorageProvider provider = (EjbExampleUserStorageProvider)ctx.lookup("java:global/keycloak-miic-spi/" + EjbExampleUserStorageProvider.class.getSimpleName());
             provider.setModel(model);
             provider.setSession(session);
             return provider;

@@ -30,11 +30,21 @@ Para instalar controlador de Oracle en modo XA:
 ```bash
 mvn -Padd-xa-datasource install
 ```
-   
+ 
 Para desplegar el componente:
-
 
 ```bash
 mvn clean install wildfly:deploy
 ```
 
+Para administrar el servidor wildfly:
+
+```bash
+http://localhost:9990
+```
+
+Para administrar el servidor keycloak:
+
+```bash
+http://localhost:9080
+```
