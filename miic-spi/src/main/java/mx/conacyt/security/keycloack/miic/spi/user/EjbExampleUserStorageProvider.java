@@ -54,9 +54,7 @@ import java.util.UUID;
 @Local(EjbExampleUserStorageProvider.class)
 public class EjbExampleUserStorageProvider implements UserStorageProvider,
         UserLookupProvider,
-        UserRegistrationProvider,
         UserQueryProvider,
-        CredentialInputUpdater,
         CredentialInputValidator,
         OnUserCache
 {
@@ -101,26 +99,27 @@ public class EjbExampleUserStorageProvider implements UserStorageProvider,
     public UserModel getUserById(String id, RealmModel realm) {
         logger.info("getUserById: " + id);
         String persistenceId = StorageId.externalId(id);
-        UserEntity entity = em.find(UserEntity.class, persistenceId);
+        UserEntity entity = em.find(UserEntity.class, Long.decode(persistenceId));
         if (entity == null) {
             logger.info("could not find user by id: " + id);
-            return null;
+            return new UserAdapter(session, realm, model);
         }
         return new UserAdapter(session, realm, model, entity);
     }
 
     @Override
-    public UserModel getUserByUsername(String username, RealmModel realm) {
-        logger.info("getUserByUsername: " + username);
+    public UserModel getUserByUsername(String login, RealmModel realm) {
+        logger.info("getUserByUsername: " + login);
         TypedQuery<UserEntity> query = em.createNamedQuery("getUserByUsername", UserEntity.class);
-        query.setParameter("username", username);
-        List<UserEntity> result = query.getResultList();
-        if (result.isEmpty()) {
-            logger.info("could not find username: " + username);
-            return null;
-        }
-
-        return new UserAdapter(session, realm, model, result.get(0));
+        query.setParameter("login", login);
+        UserEntity result = null;
+        try {
+        	result = query.getSingleResult();
+		} catch (Exception e) {
+			logger.info("could not find username: " + login);
+			return new UserAdapter(session, realm, model);
+		}
+        return new UserAdapter(session, realm, model, result);
     }
 
     @Override
@@ -130,25 +129,6 @@ public class EjbExampleUserStorageProvider implements UserStorageProvider,
         List<UserEntity> result = query.getResultList();
         if (result.isEmpty()) return null;
         return new UserAdapter(session, realm, model, result.get(0));
-    }
-
-    @Override
-    public UserModel addUser(RealmModel realm, String username) {
-        UserEntity entity = new UserEntity();
-        entity.setId(Long.getLong(UUID.randomUUID().toString()));
-        entity.setLogin(username);
-        em.persist(entity);
-        logger.info("added user: " + username);
-        return new UserAdapter(session, realm, model, entity);
-    }
-
-    @Override
-    public boolean removeUser(RealmModel realm, UserModel user) {
-        String persistenceId = StorageId.externalId(user.getId());
-        UserEntity entity = em.find(UserEntity.class, persistenceId);
-        if (entity == null) return false;
-        em.remove(entity);
-        return true;
     }
 
     @Override
@@ -164,16 +144,7 @@ public class EjbExampleUserStorageProvider implements UserStorageProvider,
         return CredentialModel.PASSWORD.equals(credentialType);
     }
 
-    @Override
-    public boolean updateCredential(RealmModel realm, UserModel user, CredentialInput input) {
-        if (!supportsCredentialType(input.getType()) || !(input instanceof UserCredentialModel)) return false;
-        UserCredentialModel cred = (UserCredentialModel)input;
-        UserAdapter adapter = getUserAdapter(user);
-        adapter.setPassword(cred.getValue());
-
-        return true;
-    }
-
+    
     public UserAdapter getUserAdapter(UserModel user) {
         UserAdapter adapter = null;
         if (user instanceof CachedUserModel) {
@@ -182,25 +153,6 @@ public class EjbExampleUserStorageProvider implements UserStorageProvider,
             adapter = (UserAdapter)user;
         }
         return adapter;
-    }
-
-    @Override
-    public void disableCredentialType(RealmModel realm, UserModel user, String credentialType) {
-        if (!supportsCredentialType(credentialType)) return;
-
-        getUserAdapter(user).setPassword(null);
-
-    }
-
-    @Override
-    public Set<String> getDisableableCredentialTypes(RealmModel realm, UserModel user) {
-        if (getUserAdapter(user).getPassword() != null) {
-            Set<String> set = new HashSet<>();
-            set.add(CredentialModel.PASSWORD);
-            return set;
-        } else {
-            return Collections.emptySet();
-        }
     }
 
     @Override

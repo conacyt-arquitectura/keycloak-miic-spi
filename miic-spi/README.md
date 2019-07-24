@@ -48,3 +48,8 @@ Para administrar el servidor keycloak:
 ```bash
 http://localhost:9080
 ```
+
+
+```bash
+mvn -Padd-xa-postgresql-datasource install
+```

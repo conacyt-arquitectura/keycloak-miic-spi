@@ -42,6 +42,14 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
         this.entity = entity;
         keycloakId = StorageId.keycloakId(model, entity.getId().toString());
     }
+    
+    public UserAdapter(KeycloakSession session, RealmModel realm, ComponentModel model) {
+        super(session, realm, model);
+        this.entity = new UserEntity();
+        this.entity.setLogin("@NO_LOGIN");
+        this.entity.setPassword("@NO_PASSWORD");
+        keycloakId = StorageId.keycloakId(model, "-1");
+    }
 
     public String getPassword() {
         return entity.getPassword();
