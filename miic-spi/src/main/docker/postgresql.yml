@@ -1,0 +1,13 @@
+version: '2'
+services:
+  postgresql:
+    image: postgres:11.3
+    command:
+      - "postgres"
+      - "-c"
+      - "max_prepared_transactions=64"
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+    ports:
+      - 5432:5432
