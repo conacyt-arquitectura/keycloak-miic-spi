@@ -27,15 +27,15 @@ import javax.naming.InitialContext;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class EjbExampleUserStorageProviderFactory implements UserStorageProviderFactory<EjbExampleUserStorageProvider> {
-    private static final Logger logger = Logger.getLogger(EjbExampleUserStorageProviderFactory.class);
+public class MiicUserStorageProviderFactory implements UserStorageProviderFactory<MiicUserStorageProvider> {
+    private static final Logger logger = Logger.getLogger(MiicUserStorageProviderFactory.class);
 
 
     @Override
-    public EjbExampleUserStorageProvider create(KeycloakSession session, ComponentModel model) {
+    public MiicUserStorageProvider create(KeycloakSession session, ComponentModel model) {
         try {
             InitialContext ctx = new InitialContext();
-            EjbExampleUserStorageProvider provider = (EjbExampleUserStorageProvider)ctx.lookup("java:global/keycloak-miic-spi/" + EjbExampleUserStorageProvider.class.getSimpleName());
+            MiicUserStorageProvider provider = (MiicUserStorageProvider)ctx.lookup("java:global/keycloak-miic-spi/" + MiicUserStorageProvider.class.getSimpleName());
             provider.setModel(model);
             provider.setSession(session);
             return provider;

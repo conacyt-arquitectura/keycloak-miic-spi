@@ -29,8 +29,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import mx.conacyt.security.keycloack.miic.spi.page.ConsolePage;
-import mx.conacyt.security.keycloack.miic.spi.user.EjbExampleUserStorageProvider;
-import mx.conacyt.security.keycloack.miic.spi.user.EjbExampleUserStorageProviderFactory;
+import mx.conacyt.security.keycloack.miic.spi.user.MiicUserStorageProvider;
+import mx.conacyt.security.keycloack.miic.spi.user.MiicUserStorageProviderFactory;
 import mx.conacyt.security.keycloack.miic.spi.user.UserAdapter;
 import mx.conacyt.security.keycloack.miic.spi.user.UserEntity;
 import org.keycloak.test.page.LoginPage;
@@ -69,7 +69,7 @@ public class ArquillianJpaStorageTest {
     @Deployment(testable = false)
     public static Archive<?> createTestArchive() throws IOException {
         return ShrinkWrap.create(JavaArchive.class, "user-storage-jpa-example.jar")
-                .addClasses(EjbExampleUserStorageProvider.class, EjbExampleUserStorageProviderFactory.class,
+                .addClasses(MiicUserStorageProvider.class, MiicUserStorageProviderFactory.class,
                         UserAdapter.class, UserEntity.class)
                 .addAsResource("META-INF/services/org.keycloak.storage.UserStorageProviderFactory")
                 .addAsResource("META-INF/persistence.xml");

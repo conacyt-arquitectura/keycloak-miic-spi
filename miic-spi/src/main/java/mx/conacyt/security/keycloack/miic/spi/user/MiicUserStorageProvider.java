@@ -47,14 +47,14 @@ import java.util.List;
 import java.util.Map;;
 
 @Stateful
-@Local(EjbExampleUserStorageProvider.class)
-public class EjbExampleUserStorageProvider implements UserStorageProvider,
+@Local(MiicUserStorageProvider.class)
+public class MiicUserStorageProvider implements UserStorageProvider,
         UserLookupProvider,
         UserQueryProvider,
         CredentialInputValidator,
         OnUserCache
 {
-    private static final Logger logger = Logger.getLogger(EjbExampleUserStorageProvider.class);
+    private static final Logger logger = Logger.getLogger(MiicUserStorageProvider.class);
     public static final String PASSWORD_CACHE_KEY = UserAdapter.class.getName() + ".password";
 
     @PersistenceContext
