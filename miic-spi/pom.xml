@@ -191,11 +191,11 @@
 											<properties>
 												<jndi-name>java:jboss/datasources/PostgresqlConacyt</jndi-name>
 												<enabled>true</enabled>
-												<connection-url>jdbc:postgresql://localhost:5432/test</connection-url>
+												<connection-url>jdbc:postgresql://localhost:5432/miic</connection-url>
 												<driver-class>org.postgresql.Driver</driver-class>
 												<driver-name>postgresql.jar</driver-name>
-												<user-name>test</user-name>
-												<password>test</password>
+												<user-name>miic</user-name>
+												<password>miic</password>
 											</properties>
 										</resource>
 									</resources>
@@ -254,7 +254,7 @@
 														xa-datasource-properties=DatabaseName
 													</address>
 													<properties>
-														<value>test</value>
+														<value>miic</value>
 													</properties>
 												</resource>
 												<resource>
@@ -270,7 +270,7 @@
 														xa-datasource-properties=User
 													</address>
 													<properties>
-														<value>test</value>
+														<value>miic</value>
 													</properties>
 												</resource>
 												<resource>
@@ -278,64 +278,15 @@
 														xa-datasource-properties=Password
 													</address>
 													<properties>
-														<value>test</value>
+														<value>miic</value>
 													</properties>
 												</resource>
 												<resource>
 													<address>
-														xa-datasource-properties=URL
+														xa-datasource-properties=PortNumber
 													</address>
 													<properties>
-														<value>jdbc:postgresql://localhost:5432/test</value>
-													</properties>
-												</resource>
-											</resources>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>add-xa-datasource</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.wildfly.plugins</groupId>
-						<artifactId>wildfly-maven-plugin</artifactId>
-						<configuration>
-							<skip>false</skip>
-							<force>true</force>
-						</configuration>
-						<executions>
-							<execution>
-								<id>add-datasource</id>
-								<phase>install</phase>
-								<goals>
-									<goal>add-resource</goal>
-								</goals>
-								<configuration>
-									<port>9990</port>
-									<force />
-									<address>subsystem=datasources</address>
-									<resources>
-										<resource>
-											<address>xa-data-source=java:jboss/datasources/ConacytXADS</address>
-											<properties>
-												<jndi-name>java:jboss/datasources/ConacytXADS</jndi-name>
-												<enabled>true</enabled>
-												<driver-name>h2</driver-name>
-											</properties>
-											<resources>
-												<resource>
-													<address>
-														xa-datasource-properties=URL
-													</address>
-													<properties>
-														<value>jdbc:h2:mem:test</value>
+														<value>5432</value>
 													</properties>
 												</resource>
 											</resources>

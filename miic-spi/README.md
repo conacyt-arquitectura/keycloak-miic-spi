@@ -13,25 +13,29 @@ Construcción y despliegue
 -------------------------------
 
 
-Para instalar controlador de PostgreSQL:
+# Para instalar controlador de PostgreSQL:
 
 ```bash
 mvn -Padd-postgresql-datasource install
 ```
 
-Para instalar controlador de Oracle:
+```bash
+mvn -Padd-xa-postgresql-datasource install
+```
+
+# Para instalar controlador de Oracle:
 
 ```bash
 mvn -Padd-oracle-datasource install
 ```
 
-Para instalar controlador de Oracle en modo XA:
+#### Para instalar controlador de Oracle en modo XA:
 
 ```bash
 mvn -Padd-xa-datasource install
 ```
  
-Para desplegar el componente:
+# Para desplegar el componente:
 
 ```bash
 mvn clean install wildfly:deploy
